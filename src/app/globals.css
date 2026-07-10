@@ -1,3 +1,5 @@
+/* FILE LOCATION: src/app/globals.css (replaces existing file) */
+
 @import "tailwindcss";
 
 :root {
@@ -154,6 +156,16 @@ body {
 .float-a { animation: float-a 6s ease-in-out infinite; }
 .float-b { animation: float-b 7.5s ease-in-out infinite; }
 .float-c { animation: float-c 5.2s ease-in-out infinite; }
+
+/* --- Hero hill wave motion --- */
+@keyframes wave-drift {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-22px); }
+}
+
+.wave-a { animation: wave-drift 10s ease-in-out infinite; }
+.wave-b { animation: wave-drift 14s ease-in-out infinite reverse; }
+.wave-c { animation: wave-drift 18s ease-in-out infinite; }
 
 /* --- Landing page: soft background blobs --- */
 @keyframes blob-pulse {
