@@ -1,66 +1,26 @@
+// FILE LOCATION: prisma/seed.ts
+
 import "dotenv/config";
-import { PrismaClient, Option } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { susTermQuestions } from "./susterm-questions";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
-const questions: {
-  text: string;
-  optionA: string;
-  optionB: string;
-  optionC: string;
-  optionD: string;
-  correctOption: Option;
-}[] = [
-  {
-    text: "What does HTML stand for?",
-    optionA: "Hyper Trainer Marking Language",
-    optionB: "Hyper Text Markup Language",
-    optionC: "Hyper Text Marketing Language",
-    optionD: "Hyper Text Markup Leveling",
-    correctOption: "B",
-  },
-  {
-    text: "Which company created the Next.js framework?",
-    optionA: "Meta",
-    optionB: "Google",
-    optionC: "Vercel",
-    optionD: "Netlify",
-    correctOption: "C",
-  },
-  {
-    text: "In JavaScript, which keyword declares a block-scoped variable?",
-    optionA: "var",
-    optionB: "let",
-    optionC: "def",
-    optionD: "static",
-    correctOption: "B",
-  },
-  {
-    text: "What does ORM stand for, as in what Prisma provides?",
-    optionA: "Object Relational Mapping",
-    optionB: "Ordered Record Model",
-    optionC: "Object Runtime Manager",
-    optionD: "Online Resource Mapping",
-    correctOption: "A",
-  },
-  {
-    text: "Which CSS utility framework uses classes like `flex` and `px-4`?",
-    optionA: "Bootstrap",
-    optionB: "Bulma",
-    optionC: "Tailwind CSS",
-    optionD: "Foundation",
-    correctOption: "C",
-  },
-];
-
 async function main() {
+  console.log("Clearing existing questions (and their attempts/answers)...");
+  // Answer rows cascade-delete automatically via the schema's onDelete: Cascade,
+  // and Attempt rows are cleared too since they'd otherwise reference deleted questions.
+  await prisma.answer.deleteMany();
+  await prisma.attempt.deleteMany();
+  await prisma.question.deleteMany();
+
   console.log("Seeding database...");
-  for (const q of questions) {
+  for (const q of susTermQuestions) {
     await prisma.question.create({ data: q });
   }
-  console.log(`Seeded ${questions.length} questions.`);
+  console.log(`Seeded ${susTermQuestions.length} questions.`);
 }
 
 main()
