@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import ScoreReveal from "@/components/ScoreReveal";
 
 const OPTION_KEYS = ["A", "B", "C", "D"] as const;
 
@@ -22,8 +23,6 @@ export default async function ResultPage({
 
   if (!attempt) notFound();
 
-  const percent = Math.round((attempt.score / attempt.total) * 100);
-
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
       <p className="tabnum text-sm text-accent">Result</p>
@@ -31,20 +30,18 @@ export default async function ResultPage({
         {attempt.takerName ? `Nice work, ${attempt.takerName}.` : "Quiz complete."}
       </h1>
 
-      <div className="mt-6 flex items-end gap-4 rounded-lg border border-line bg-surface p-6">
-        <span className="tabnum text-5xl font-semibold text-foreground">
-          {attempt.score}/{attempt.total}
-        </span>
-        <span className="tabnum mb-1 text-lg text-muted">{percent}%</span>
+      <div className="mt-6">
+        <ScoreReveal score={attempt.score} total={attempt.total} />
       </div>
 
       <div className="mt-10 flex flex-col gap-4">
         {attempt.answers.map((a, i) => (
           <div
             key={a.id}
-            className={`rounded-lg border p-4 ${
+            className={`question-enter rounded-lg border p-4 ${
               a.isCorrect ? "border-correct/30 bg-correct/5" : "border-incorrect/30 bg-incorrect/5"
             }`}
+            style={{ animationDelay: `${i * 60}ms`, animationFillMode: "backwards" }}
           >
             <p className="text-sm text-muted">
               <span className="tabnum">Q{i + 1}.</span> {a.question.text}

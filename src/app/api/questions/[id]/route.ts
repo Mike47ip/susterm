@@ -57,6 +57,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
         optionC: b.optionC.trim(),
         optionD: b.optionD.trim(),
         correctOption: b.correctOption as Prisma.QuestionUpdateInput["correctOption"],
+        definition: b.definition?.trim() || null,
       },
     });
     return NextResponse.json(question);

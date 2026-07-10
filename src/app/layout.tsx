@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "QuizBench — Q&A App",
-  description: "Create multiple-choice questions and take timed quizzes with instant scoring.",
+  title: "Sustained — Sustainability Q&A",
+  description: "Learn sustainability terms from the SusTerm Dictionary through interactive, scored multiple-choice quizzes.",
 };
 
 export default function RootLayout({

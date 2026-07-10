@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
         optionC: b.optionC.trim(),
         optionD: b.optionD.trim(),
         correctOption: b.correctOption as Prisma.QuestionCreateInput["correctOption"],
+        definition: b.definition?.trim() || null,
       },
     });
     return NextResponse.json(question, { status: 201 });

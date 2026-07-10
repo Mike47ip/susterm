@@ -13,6 +13,7 @@ export type QuestionFormValues = {
   optionC: string;
   optionD: string;
   correctOption: OptionKey;
+  definition: string;
 };
 
 const EMPTY: QuestionFormValues = {
@@ -22,6 +23,7 @@ const EMPTY: QuestionFormValues = {
   optionC: "",
   optionD: "",
   correctOption: "A",
+  definition: "",
 };
 
 export default function QuestionForm({
@@ -113,6 +115,20 @@ export default function QuestionForm({
         </div>
         <p className="mt-2 text-xs text-muted">Select the radio button next to the correct option.</p>
       </fieldset>
+
+      <div>
+        <label className="block text-sm font-medium text-muted" htmlFor="definition">
+          Definition <span className="font-normal">(shown to the user if they answer wrong)</span>
+        </label>
+        <textarea
+          id="definition"
+          rows={3}
+          value={values.definition}
+          onChange={(e) => setField("definition", e.target.value)}
+          className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-accent"
+          placeholder="Optional — the full definition to display after a wrong answer"
+        />
+      </div>
 
       {error && <p className="text-sm text-incorrect">{error}</p>}
 
