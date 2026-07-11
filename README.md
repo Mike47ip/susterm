@@ -1,11 +1,15 @@
-# QuizBench
+# Sustained
 
 A multiple-choice Q&A app built with **Next.js (App Router)**, **Prisma** (SQLite), and **Tailwind CSS**.
 
 - Admin panel to create, edit, and delete questions (options A–D, one correct answer)
-- Public quiz flow that steps through questions and submits answers
-- Automatic scoring, with results saved to the database and a shareable result page
+- Public quiz flow that steps through questions and submits answers, with keyboard shortcuts
+  (A–D / 1–4 to answer, Enter to continue, arrow keys to navigate) and auto-advance
+- Automatic scoring, with results saved to the database and a shareable, animated result page
+  (score count-up, confetti on strong scores)
 - Recent-attempts list in the admin dashboard
+- Seed data: 20 real questions generated from the *SusTerm Dictionary* (Study Sustainability
+  Hub) — each dictionary "Example" becomes the question, with the term itself as the answer
 
 ## 1. Install dependencies
 
@@ -85,7 +89,8 @@ yarn start         # run the production build
 prisma.config.ts     # Prisma 7 config: schema path, migrations, datasource URL
 prisma/
   schema.prisma       # Question, Attempt, Answer models (Postgres)
-  seed.ts             # sample question seeder
+  seed.ts             # loads susterm-questions.ts into the database
+  susterm-questions.ts # 20 generated Q&A pairs from the SusTerm Dictionary
 src/
   lib/prisma.ts        # Prisma client singleton
   components/          # Nav, QuizRunner, QuestionForm, DeleteQuestionButton

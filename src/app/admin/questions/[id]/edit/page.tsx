@@ -26,6 +26,9 @@ export default async function EditQuestionPage({
             optionC: question.optionC,
             optionD: question.optionD,
             correctOption: question.correctOption,
+            definition: question.definition ?? "",
+            level: question.level,
+            batch: question.batch,
           }}
         />
       </div>

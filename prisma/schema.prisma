@@ -16,6 +16,11 @@ enum Option {
   D
 }
 
+enum Level {
+  EASY
+  DIFFICULT
+}
+
 model Question {
   id            String   @id @default(cuid())
   text          String
@@ -24,10 +29,15 @@ model Question {
   optionC       String
   optionD       String
   correctOption Option
+  definition    String?
+  level         Level    @default(EASY)
+  batch         Int      @default(1)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   answers       Answer[]
+
+  @@index([level, batch])
 }
 
 model Attempt {

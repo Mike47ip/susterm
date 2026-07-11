@@ -1,9 +1,8 @@
-// FILE LOCATION: prisma/susterm-questions.ts
-
 // Hand-curated from the SusTerm Dictionary PDF (first 10, for approval before
 // generating the rest). Pattern: the dictionary "Example" becomes the question,
 // with the term itself hashed out as "........" (and the sentence trimmed /
-// turned into a "...?" when the blank falls at the end).
+// turned into a "...?" when the blank falls at the end). `definition` is the
+// dictionary's own definition, shown to the user after a wrong answer.
 import { Option } from "@prisma/client";
 
 export const susTermQuestions: {
@@ -13,6 +12,7 @@ export const susTermQuestions: {
   optionC: string;
   optionD: string;
   correctOption: Option;
+  definition: string;
 }[] = [
   {
     // 1. 1.5 DEGREES
@@ -22,6 +22,8 @@ export const susTermQuestions: {
     optionC: "44",
     optionD: "6",
     correctOption: "A",
+    definition:
+      'The "1.5 degrees" goal refers to an international target to limit the average increase in Earth\'s temperature to no more than 1.5 degrees Celsius above pre-industrial levels (around 1850). Going above 1.5°C of warming brings much worse risks — stronger hurricanes, deadlier heatwaves, higher sea levels, and more damage to wildlife and food systems.',
   },
   {
     // 2. AA1000 ASSURANCE STANDARD
@@ -31,6 +33,8 @@ export const susTermQuestions: {
     optionC: "International Standard on Assurance Engagements 3000 (ISAE 3000)",
     optionD: "Global Reporting Initiative (GRI) Framework",
     correctOption: "B",
+    definition:
+      "The AA1000 Assurance Standard is a set of international rules that help check if a company's sustainability information (like reports on their climate actions, social programs, etc.) is true, clear, and trustworthy.",
   },
   {
     // 3. ABATEMENT
@@ -40,6 +44,8 @@ export const susTermQuestions: {
     optionC: "Abatement",
     optionD: "Mitigation",
     correctOption: "C",
+    definition:
+      "Abatement means taking action to reduce or remove harmful pollution, especially greenhouse gases like carbon dioxide, from the atmosphere.",
   },
   {
     // 4. ABSOLUTE CONTRACTION
@@ -49,6 +55,8 @@ export const susTermQuestions: {
     optionC: "Absolute Reductions",
     optionD: "Absolute Contraction",
     correctOption: "D",
+    definition:
+      "Absolute contraction is when a country, business, or organization must reduce its total greenhouse gas emissions by a specific, real amount — not just slow down how fast it grows.",
   },
   {
     // 5. ABSOLUTE REDUCTIONS (term isn't named in the example itself)
@@ -58,6 +66,8 @@ export const susTermQuestions: {
     optionC: "Absolute Contraction",
     optionD: "Absolute Target",
     correctOption: "A",
+    definition:
+      "Absolute reductions mean lowering the total quantity of emissions (not relative to business size, production levels, or profits).",
   },
   {
     // 6. ABSOLUTE TARGET
@@ -67,6 +77,8 @@ export const susTermQuestions: {
     optionC: "Absolute Target",
     optionD: "Absolute Reductions",
     correctOption: "C",
+    definition:
+      "An absolute target is a fixed goal to reduce total greenhouse gas emissions by a specific number or percentage, within a certain timeframe.",
   },
   {
     // 7. ACTIVE OWNERSHIP (term isn't named in the example itself)
@@ -76,6 +88,8 @@ export const susTermQuestions: {
     optionC: "Product Stewardship",
     optionD: "Communication + Engagement",
     correctOption: "B",
+    definition:
+      "Active ownership means that investors (like shareholders) use their rights to influence the companies they invest in — pushing them to act in a more sustainable and responsible way.",
   },
   {
     // 8. ACTIVE TRANSPORT
@@ -85,6 +99,8 @@ export const susTermQuestions: {
     optionC: "Active Transport",
     optionD: "Sustainable Transport",
     correctOption: "C",
+    definition:
+      "Active transport is moving from place to place using your own physical energy, like walking, biking, running, or even skating, instead of using motorized transport like cars or buses.",
   },
   {
     // 9. ADAPTATION
@@ -94,6 +110,8 @@ export const susTermQuestions: {
     optionC: "Climate Resilience",
     optionD: "Adaptation Strategies",
     correctOption: "B",
+    definition:
+      "Adaptation means changing our behaviour, environment, or systems to deal with the current or expected effects of climate change. Instead of stopping climate change (mitigation), adaptation is about getting ready for it and reducing the harm it can cause.",
   },
   {
     // 10. ADAPTATION STRATEGIES
@@ -103,5 +121,7 @@ export const susTermQuestions: {
     optionC: "Adaptation",
     optionD: "Adaptation Strategies",
     correctOption: "D",
+    definition:
+      "Adaptation strategies are plans or actions that communities, governments, and businesses create to adjust to the impacts of climate change.",
   },
 ];

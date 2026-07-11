@@ -4,7 +4,7 @@ import DeleteQuestionButton from "@/components/DeleteQuestionButton";
 
 export default async function AdminPage() {
   const [questions, attempts] = await Promise.all([
-    prisma.question.findMany({ orderBy: { createdAt: "desc" } }),
+    prisma.question.findMany({ orderBy: [{ level: "asc" }, { batch: "asc" }, { createdAt: "asc" }] }),
     prisma.attempt.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
   ]);
 
@@ -39,8 +39,17 @@ export default async function AdminPage() {
                   <p className="text-sm text-foreground">
                     <span className="tabnum text-muted">Q{i + 1}.</span> {q.text}
                   </p>
-                  <p className="tabnum mt-1 text-xs text-muted">
-                    Correct: {q.correctOption}
+                  <p className="tabnum mt-1 flex items-center gap-2 text-xs text-muted">
+                    <span>Correct: {q.correctOption}</span>
+                    <span
+                      className={`rounded px-1.5 py-0.5 ${
+                        q.level === "DIFFICULT"
+                          ? "bg-incorrect/10 text-incorrect"
+                          : "bg-correct/10 text-correct"
+                      }`}
+                    >
+                      {q.level === "DIFFICULT" ? "Difficult" : "Easy"} · Set {q.batch}
+                    </span>
                   </p>
                 </div>
                 <div className="flex shrink-0 gap-4">
