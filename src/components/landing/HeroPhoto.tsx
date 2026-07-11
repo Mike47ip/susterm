@@ -1,5 +1,3 @@
-// FILE LOCATION: src/components/landing/HeroPhoto.tsx (replaces existing file)
-
 export default function HeroPhoto() {
   return (
     <div

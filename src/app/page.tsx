@@ -1,5 +1,3 @@
-// FILE LOCATION: src/app/page.tsx (replaces existing file)
-
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import GrowthMark from "@/components/landing/GrowthMark";
@@ -63,7 +61,7 @@ export default async function Home() {
       </section>
 
       {/* Stats */}
-      <section className="mx-auto max-w-5xl pt-10 px-6 pb-4">
+      <section className="mx-auto max-w-5xl px-6 pb-4">
         <RevealOnScroll>
           <dl className="grid grid-cols-2 gap-4 sm:w-96">
             <div className="rounded-lg border border-line bg-surface p-4">

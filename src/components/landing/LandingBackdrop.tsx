@@ -1,5 +1,3 @@
-// FILE LOCATION: src/components/landing/LandingBackdrop.tsx (replaces existing file)
-
 export default function LandingBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">

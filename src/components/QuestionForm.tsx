@@ -14,6 +14,8 @@ export type QuestionFormValues = {
   optionD: string;
   correctOption: OptionKey;
   definition: string;
+  level: "EASY" | "DIFFICULT";
+  batch: number;
 };
 
 const EMPTY: QuestionFormValues = {
@@ -24,6 +26,8 @@ const EMPTY: QuestionFormValues = {
   optionD: "",
   correctOption: "A",
   definition: "",
+  level: "EASY",
+  batch: 1,
 };
 
 export default function QuestionForm({
@@ -128,6 +132,37 @@ export default function QuestionForm({
           className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-accent"
           placeholder="Optional — the full definition to display after a wrong answer"
         />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-muted" htmlFor="level">
+            Difficulty
+          </label>
+          <select
+            id="level"
+            value={values.level}
+            onChange={(e) => setField("level", e.target.value as "EASY" | "DIFFICULT")}
+            className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-accent"
+          >
+            <option value="EASY">Easy</option>
+            <option value="DIFFICULT">Difficult</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-muted" htmlFor="batch">
+            Set number
+          </label>
+          <input
+            id="batch"
+            type="number"
+            min={1}
+            required
+            value={values.batch}
+            onChange={(e) => setField("batch", Math.max(1, Number(e.target.value) || 1))}
+            className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-accent"
+          />
+        </div>
       </div>
 
       {error && <p className="text-sm text-incorrect">{error}</p>}

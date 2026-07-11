@@ -1,5 +1,3 @@
-// FILE LOCATION: src/components/landing/GrowthMark.tsx (replaces existing file)
-
 export default function GrowthMark() {
   return (
     <div className="relative mx-auto flex h-64 w-64 items-center justify-center sm:h-72 sm:w-72">

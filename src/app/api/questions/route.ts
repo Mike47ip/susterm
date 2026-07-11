@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
 
 const VALID_OPTIONS = ["A", "B", "C", "D"] as const;
+const VALID_LEVELS = ["EASY", "DIFFICULT"] as const;
 
 function validateQuestionBody(body: unknown) {
   if (typeof body !== "object" || body === null) {
@@ -17,6 +18,12 @@ function validateQuestionBody(body: unknown) {
   }
   if (!VALID_OPTIONS.includes(b.correctOption as (typeof VALID_OPTIONS)[number])) {
     return `Field "correctOption" must be one of A, B, C, D.`;
+  }
+  if (b.level !== undefined && !VALID_LEVELS.includes(b.level as (typeof VALID_LEVELS)[number])) {
+    return `Field "level" must be either EASY or DIFFICULT.`;
+  }
+  if (b.batch !== undefined && (typeof b.batch !== "number" || b.batch < 1)) {
+    return `Field "batch" must be a positive number.`;
   }
   return null;
 }
@@ -41,7 +48,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error }, { status: 400 });
   }
 
-  const b = body as Record<string, string>;
+  const b = body as Record<string, string> & { level?: "EASY" | "DIFFICULT"; batch?: number };
 
   try {
     const question = await prisma.question.create({
@@ -53,6 +60,8 @@ export async function POST(req: NextRequest) {
         optionD: b.optionD.trim(),
         correctOption: b.correctOption as Prisma.QuestionCreateInput["correctOption"],
         definition: b.definition?.trim() || null,
+        level: b.level ?? "EASY",
+        batch: b.batch ?? 1,
       },
     });
     return NextResponse.json(question, { status: 201 });
