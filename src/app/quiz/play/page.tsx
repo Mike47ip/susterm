@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getSessionUser } from "@/lib/auth";
 import QuizRunner from "@/components/QuizRunner";
 
 const VALID_LEVELS = ["EASY", "DIFFICULT"] as const;
@@ -18,19 +19,22 @@ export default async function QuizPlayPage({
     notFound();
   }
 
-  const questions = await prisma.question.findMany({
-    where: { level: level as "EASY" | "DIFFICULT", batch },
-    orderBy: { createdAt: "asc" },
-    select: {
-      id: true,
-      text: true,
-      optionA: true,
-      optionB: true,
-      optionC: true,
-      optionD: true,
-      // correctOption intentionally omitted — never sent to the client
-    },
-  });
+  const [questions, sessionUser] = await Promise.all([
+    prisma.question.findMany({
+      where: { level: level as "EASY" | "DIFFICULT", batch },
+      orderBy: { createdAt: "asc" },
+      select: {
+        id: true,
+        text: true,
+        optionA: true,
+        optionB: true,
+        optionC: true,
+        optionD: true,
+        // correctOption intentionally omitted — never sent to the client
+      },
+    }),
+    getSessionUser(),
+  ]);
 
   if (questions.length === 0) {
     return (
@@ -49,5 +53,5 @@ export default async function QuizPlayPage({
     );
   }
 
-  return <QuizRunner questions={questions} />;
+  return <QuizRunner questions={questions} loggedInName={sessionUser?.name} />;
 }

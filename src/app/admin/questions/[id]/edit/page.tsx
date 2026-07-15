@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireSuperAdmin } from "@/lib/auth";
 import QuestionForm from "@/components/QuestionForm";
 
 export default async function EditQuestionPage({
@@ -7,6 +8,7 @@ export default async function EditQuestionPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireSuperAdmin();
   const { id } = await params;
   const question = await prisma.question.findUnique({ where: { id } });
   if (!question) notFound();

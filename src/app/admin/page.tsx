@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { requireSuperAdmin } from "@/lib/auth";
 import DeleteQuestionButton from "@/components/DeleteQuestionButton";
 
 export default async function AdminPage() {
+  await requireSuperAdmin();
+
   const [questions, attempts] = await Promise.all([
     prisma.question.findMany({ orderBy: [{ level: "asc" }, { batch: "asc" }, { createdAt: "asc" }] }),
     prisma.attempt.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
@@ -15,12 +18,20 @@ export default async function AdminPage() {
           <p className="tabnum text-sm text-accent">Admin</p>
           <h1 className="mt-1 text-3xl font-semibold text-foreground">Questions</h1>
         </div>
-        <Link
-          href="/admin/questions/new"
-          className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-ink hover:opacity-90"
-        >
-          + New question
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href="/admin/users"
+            className="rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:border-accent"
+          >
+            Users
+          </Link>
+          <Link
+            href="/admin/questions/new"
+            className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-ink hover:opacity-90"
+          >
+            + New question
+          </Link>
+        </div>
       </div>
 
       {questions.length === 0 ? (

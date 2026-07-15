@@ -30,7 +30,13 @@ type Feedback = { correct: boolean; correctOption: OptionKey; definition: string
 
 const AUTO_ADVANCE_DELAY = 1400;
 
-export default function QuizRunner({ questions }: { questions: QuizQuestion[] }) {
+export default function QuizRunner({
+  questions,
+  loggedInName,
+}: {
+  questions: QuizQuestion[];
+  loggedInName?: string;
+}) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, OptionKey>>({});
@@ -282,17 +288,32 @@ export default function QuizRunner({ questions }: { questions: QuizQuestion[] })
 
       {isLast && currentFeedback && (
         <div className="mt-8">
-          <label className="block text-sm font-medium text-muted" htmlFor="takerName">
-            Your name (optional)
-          </label>
-          <input
-            id="takerName"
-            type="text"
-            value={takerName}
-            onChange={(e) => setTakerName(e.target.value)}
-            placeholder="Anonymous"
-            className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-accent"
-          />
+          {loggedInName ? (
+            <p className="text-sm text-muted">
+              Playing as <span className="font-medium text-foreground">{loggedInName}</span> —
+              this score will count toward the leaderboard.
+            </p>
+          ) : (
+            <>
+              <label className="block text-sm font-medium text-muted" htmlFor="takerName">
+                Your name (optional)
+              </label>
+              <input
+                id="takerName"
+                type="text"
+                value={takerName}
+                onChange={(e) => setTakerName(e.target.value)}
+                placeholder="Anonymous"
+                className="mt-1.5 w-full rounded-md border border-line bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-accent"
+              />
+              <p className="mt-1.5 text-xs text-muted">
+                <a href="/login" className="text-accent underline underline-offset-2">
+                  Log in
+                </a>{" "}
+                to have this count toward the leaderboard.
+              </p>
+            </>
+          )}
         </div>
       )}
 

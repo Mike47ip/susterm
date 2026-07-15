@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { getSessionUser } from "@/lib/auth";
 
 const VALID_OPTIONS = ["A", "B", "C", "D"] as const;
 const VALID_LEVELS = ["EASY", "DIFFICULT"] as const;
@@ -36,6 +37,11 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const sessionUser = await getSessionUser();
+  if (!sessionUser || sessionUser.role !== "SUPER_ADMIN") {
+    return NextResponse.json({ error: "Not authorized." }, { status: 403 });
+  }
+
   let body: unknown;
   try {
     body = await req.json();

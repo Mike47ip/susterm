@@ -1,6 +1,10 @@
 import Link from "next/link";
+import { getSessionUser } from "@/lib/auth";
+import LogoutButton from "@/components/LogoutButton";
 
-export default function Nav() {
+export default async function Nav() {
+  const user = await getSessionUser();
+
   return (
     <header className="border-b border-line bg-surface">
       <div className="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
@@ -16,9 +20,32 @@ export default function Nav() {
           <Link href="/quiz" className="hover:text-accent transition-colors">
             Take Quiz
           </Link>
-          <Link href="/admin" className="hover:text-accent transition-colors">
-            Admin
+          <Link href="/leaderboard" className="hover:text-accent transition-colors">
+            Leaderboard
           </Link>
+          {user?.role === "SUPER_ADMIN" && (
+            <Link href="/admin" className="hover:text-accent transition-colors">
+              Admin
+            </Link>
+          )}
+          {user ? (
+            <div className="flex items-center gap-4 border-l border-line pl-6">
+              <span className="text-foreground">{user.name}</span>
+              <LogoutButton />
+            </div>
+          ) : (
+            <div className="flex items-center gap-4 border-l border-line pl-6">
+              <Link href="/login" className="hover:text-accent transition-colors">
+                Log in
+              </Link>
+              <Link
+                href="/signup"
+                className="rounded-md bg-accent px-3 py-1.5 text-sm font-medium text-accent-ink hover:opacity-90"
+              >
+                Sign up
+              </Link>
+            </div>
+          )}
         </nav>
       </div>
     </header>
