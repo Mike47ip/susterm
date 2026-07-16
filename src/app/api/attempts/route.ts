@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Option } from "@prisma/client";
+import { getSessionUser } from "@/lib/auth";
 
 const VALID_OPTIONS = ["A", "B", "C", "D"] as const;
 
@@ -62,9 +63,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "None of the submitted questions were found." }, { status: 400 });
   }
 
+  // If the person is logged in, attach the attempt to their account (this is what
+  // feeds the leaderboard) — but anonymous play still works fine, it just won't
+  // show up there.
+  const sessionUser = await getSessionUser();
+
   const attempt = await prisma.attempt.create({
     data: {
-      takerName: b.takerName?.trim() || null,
+      takerName: sessionUser?.name || b.takerName?.trim() || null,
+      userId: sessionUser?.id,
       score,
       total: answerRows.length,
       answers: {

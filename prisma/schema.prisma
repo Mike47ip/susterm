@@ -21,6 +21,22 @@ enum Level {
   DIFFICULT
 }
 
+enum Role {
+  USER
+  SUPER_ADMIN
+}
+
+model User {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(USER)
+  createdAt    DateTime  @default(now())
+
+  attempts     Attempt[]
+}
+
 model Question {
   id            String   @id @default(cuid())
   text          String
@@ -43,11 +59,15 @@ model Question {
 model Attempt {
   id         String   @id @default(cuid())
   takerName  String?
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
   score      Int
   total      Int
   createdAt  DateTime @default(now())
 
   answers    Answer[]
+
+  @@index([userId])
 }
 
 model Answer {

@@ -1,6 +1,9 @@
 import QuestionForm from "@/components/QuestionForm";
+import { requireSuperAdmin } from "@/lib/auth";
 
-export default function NewQuestionPage() {
+export default async function NewQuestionPage() {
+  await requireSuperAdmin();
+
   return (
     <div className="mx-auto max-w-2xl px-6 py-12">
       <p className="tabnum text-sm text-accent">Admin</p>
