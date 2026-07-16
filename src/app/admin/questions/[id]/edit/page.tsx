@@ -1,6 +1,7 @@
+// FILE LOCATION: src/app/admin/questions/[id]/edit/page.tsx
+
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/auth";
 import QuestionForm from "@/components/QuestionForm";
 
 export default async function EditQuestionPage({
@@ -8,16 +9,14 @@ export default async function EditQuestionPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  await requireSuperAdmin();
   const { id } = await params;
   const question = await prisma.question.findUnique({ where: { id } });
   if (!question) notFound();
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-12">
-      <p className="tabnum text-sm text-accent">Admin</p>
-      <h1 className="mt-1 text-3xl font-semibold text-foreground">Edit question</h1>
-      <div className="mt-8">
+    <div className="mx-auto max-w-2xl">
+      <h2 className="text-xl font-semibold text-foreground">Edit question</h2>
+      <div className="mt-6 rounded-lg border border-line bg-surface p-6">
         <QuestionForm
           mode="edit"
           questionId={question.id}

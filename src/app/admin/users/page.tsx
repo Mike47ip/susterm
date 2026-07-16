@@ -1,10 +1,9 @@
-import Link from "next/link";
+// FILE LOCATION: src/app/admin/users/page.tsx
+
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/auth";
+import StatCard from "@/components/StatCard";
 
 export default async function AdminUsersPage() {
-  await requireSuperAdmin();
-
   const users = await prisma.user.findMany({
     orderBy: { createdAt: "desc" },
     include: {
@@ -12,19 +11,17 @@ export default async function AdminUsersPage() {
     },
   });
 
+  const superAdminCount = users.filter((u) => u.role === "SUPER_ADMIN").length;
+  const totalAttempts = users.reduce((sum, u) => sum + u.attempts.length, 0);
+
   return (
-    <div className="mx-auto max-w-4xl px-6 py-12">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="tabnum text-sm text-accent">Admin</p>
-          <h1 className="mt-1 text-3xl font-semibold text-foreground">Users</h1>
-        </div>
-        <Link
-          href="/admin"
-          className="rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:border-accent"
-        >
-          Back to questions
-        </Link>
+    <div>
+      <h2 className="text-xl font-semibold text-foreground">Users</h2>
+
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <StatCard label="Registered users" value={users.length} accent />
+        <StatCard label="Super admins" value={superAdminCount} />
+        <StatCard label="Total attempts" value={totalAttempts} />
       </div>
 
       {users.length === 0 ? (
