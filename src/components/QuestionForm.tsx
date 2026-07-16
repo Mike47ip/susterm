@@ -1,11 +1,6 @@
 "use client";
 
 // FILE LOCATION: src/components/QuestionForm.tsx
-// This must export a component called QuestionForm with props (mode,
-// questionId, initialValues) — used by the add/edit question pages.
-// It is a DIFFERENT file from QuestionGroups.tsx (the list/search view on
-// the main /admin page). Select-all + replace the entire current content
-// of QuestionForm.tsx with this.
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";

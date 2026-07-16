@@ -1,6 +1,6 @@
 // FILE LOCATION: src/app/admin/questions/new/page.tsx
 
-import QuestionForm from "@/components/QuestionGroups";
+import QuestionForm from "@/components/QuestionForm";
 
 export default function NewQuestionPage() {
   return (

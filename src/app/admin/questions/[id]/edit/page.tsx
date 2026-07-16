@@ -2,7 +2,7 @@
 
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import QuestionForm from "@/components/QuestionGroups";
+import QuestionForm from "@/components/QuestionForm";
 
 export default async function EditQuestionPage({
   params,
