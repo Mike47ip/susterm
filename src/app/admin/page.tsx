@@ -1,86 +1,57 @@
+// FILE LOCATION: src/app/admin/page.tsx
+
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/auth";
-import DeleteQuestionButton from "@/components/DeleteQuestionButton";
+import StatCard from "@/components/StatCard";
+import QuestionGroups from "@/components/QuestionGroups";
 
 export default async function AdminPage() {
-  await requireSuperAdmin();
-
-  const [questions, attempts] = await Promise.all([
-    prisma.question.findMany({ orderBy: [{ level: "asc" }, { batch: "asc" }, { createdAt: "asc" }] }),
-    prisma.attempt.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
-  ]);
+  const [questions, attemptCount, userCount, easyCount, difficultCount, recentAttempts] =
+    await Promise.all([
+      prisma.question.findMany({
+        select: { id: true, text: true, correctOption: true, level: true, batch: true },
+        orderBy: [{ level: "asc" }, { batch: "asc" }, { createdAt: "asc" }],
+      }),
+      prisma.attempt.count(),
+      prisma.user.count(),
+      prisma.question.count({ where: { level: "EASY" } }),
+      prisma.question.count({ where: { level: "DIFFICULT" } }),
+      prisma.attempt.findMany({ orderBy: { createdAt: "desc" }, take: 8 }),
+    ]);
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-12">
+    <div>
       <div className="flex items-center justify-between">
-        <div>
-          <p className="tabnum text-sm text-accent">Admin</p>
-          <h1 className="mt-1 text-3xl font-semibold text-foreground">Questions</h1>
-        </div>
-        <div className="flex gap-3">
-          <Link
-            href="/admin/users"
-            className="rounded-md border border-line px-4 py-2 text-sm font-medium text-foreground hover:border-accent"
-          >
-            Users
-          </Link>
-          <Link
-            href="/admin/questions/new"
-            className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-ink hover:opacity-90"
-          >
-            + New question
-          </Link>
-        </div>
+        <h2 className="text-xl font-semibold text-foreground">Questions</h2>
+        <Link
+          href="/admin/questions/new"
+          className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-ink hover:opacity-90"
+        >
+          + New question
+        </Link>
       </div>
 
-      {questions.length === 0 ? (
-        <p className="mt-8 text-sm text-muted">
-          No questions yet. Add one to get the quiz started.
-        </p>
-      ) : (
-        <ul className="mt-8 flex flex-col gap-3">
-          {questions.map((q, i) => (
-            <li
-              key={q.id}
-              className="rounded-lg border border-line bg-surface p-4"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm text-foreground">
-                    <span className="tabnum text-muted">Q{i + 1}.</span> {q.text}
-                  </p>
-                  <p className="tabnum mt-1 flex items-center gap-2 text-xs text-muted">
-                    <span>Correct: {q.correctOption}</span>
-                    <span
-                      className={`rounded px-1.5 py-0.5 ${
-                        q.level === "DIFFICULT"
-                          ? "bg-incorrect/10 text-incorrect"
-                          : "bg-correct/10 text-correct"
-                      }`}
-                    >
-                      {q.level === "DIFFICULT" ? "Difficult" : "Easy"} · Set {q.batch}
-                    </span>
-                  </p>
-                </div>
-                <div className="flex shrink-0 gap-4">
-                  <Link
-                    href={`/admin/questions/${q.id}/edit`}
-                    className="text-sm font-medium text-accent hover:opacity-80"
-                  >
-                    Edit
-                  </Link>
-                  <DeleteQuestionButton id={q.id} />
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <StatCard label="Total questions" value={questions.length} accent />
+        <StatCard label="Easy" value={easyCount} />
+        <StatCard label="Difficult" value={difficultCount} />
+        <StatCard label="Total attempts" value={attemptCount} />
+      </div>
+
+      <div className="mt-8">
+        {questions.length === 0 ? (
+          <p className="text-sm text-muted">No questions yet. Add one to get the quiz started.</p>
+        ) : (
+          <QuestionGroups questions={questions} />
+        )}
+      </div>
 
       <div className="mt-14">
-        <h2 className="text-xl font-semibold text-foreground">Recent attempts</h2>
-        {attempts.length === 0 ? (
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-semibold text-foreground">Recent attempts</h2>
+          <span className="tabnum text-xs text-muted">{userCount} registered users</span>
+        </div>
+        {recentAttempts.length === 0 ? (
           <p className="mt-3 text-sm text-muted">No one has taken the quiz yet.</p>
         ) : (
           <div className="mt-4 overflow-hidden rounded-lg border border-line bg-surface">
@@ -94,15 +65,13 @@ export default async function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {attempts.map((a) => (
+                {recentAttempts.map((a) => (
                   <tr key={a.id} className="border-b border-line last:border-0">
                     <td className="px-4 py-3 text-foreground">{a.takerName || "Anonymous"}</td>
                     <td className="tabnum px-4 py-3 text-foreground">
                       {a.score}/{a.total}
                     </td>
-                    <td className="tabnum px-4 py-3 text-muted">
-                      {a.createdAt.toLocaleString()}
-                    </td>
+                    <td className="tabnum px-4 py-3 text-muted">{a.createdAt.toLocaleString()}</td>
                     <td className="px-4 py-3">
                       <Link
                         href={`/quiz/result/${a.id}`}

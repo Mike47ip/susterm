@@ -1,14 +1,12 @@
-import QuestionForm from "@/components/QuestionForm";
-import { requireSuperAdmin } from "@/lib/auth";
+// FILE LOCATION: src/app/admin/questions/new/page.tsx
 
-export default async function NewQuestionPage() {
-  await requireSuperAdmin();
+import QuestionForm from "@/components/QuestionGroups";
 
+export default function NewQuestionPage() {
   return (
-    <div className="mx-auto max-w-2xl px-6 py-12">
-      <p className="tabnum text-sm text-accent">Admin</p>
-      <h1 className="mt-1 text-3xl font-semibold text-foreground">New question</h1>
-      <div className="mt-8">
+    <div className="mx-auto max-w-2xl">
+      <h2 className="text-xl font-semibold text-foreground">New question</h2>
+      <div className="mt-6 rounded-lg border border-line bg-surface p-6">
         <QuestionForm mode="create" />
       </div>
     </div>

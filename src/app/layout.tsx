@@ -1,3 +1,5 @@
+// FILE LOCATION: src/app/layout.tsx
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Nav from "@/components/Nav";
@@ -14,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Sustained — Sustainability Q&A",
+  title: "Susterm — Sustainability Q&A",
   description: "Learn sustainability terms from the SusTerm Dictionary through interactive, scored multiple-choice quizzes.",
 };
 
